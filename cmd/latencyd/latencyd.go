@@ -50,8 +50,10 @@ func genRandomLatencyHandler(start, end int64) libhttp.Service {
 	delta := right - left
 
 	return func(req libhttp.Request) libhttp.Response {
-		sleepyTime := time.Millisecond * time.Duration(rand.Intn(int(delta)))
-		log.Println("sleeping now for", time.Duration(rand.Intn(int(delta))))
+
+		sleepyTime := time.Millisecond * (time.Duration(rand.Intn(int(delta))) + time.Duration(start))
+
+		log.Println("sleeping now for", sleepyTime))
 		time.Sleep(sleepyTime)
 		return req.Response(map[string]string{
 			"message": fmt.Sprintf("slept for %v", sleepyTime),
